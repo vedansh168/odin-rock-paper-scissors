@@ -8,7 +8,58 @@
 
     <body>
         <script>
-            
+            function getComputerChoice() {
+                const prob = Math.random() * 3;
+
+                if (prob <= 1) {
+                    return "rock";
+                } else if (prob <= 2) {
+                    return "paper";
+                } else {
+                    return "scissors";
+                }
+            }
+
+            function getHumanChoice() {
+                return prompt("Please choose between rock, paper, scissors to play in this round");
+            }
+
+            function playGame() {
+                let humanScore = 0;
+                let computerScore = 0;
+
+                function playRound(humanChoice, computerChoice) {
+                    humanChoice = humanChoice.toLowerCase();
+
+                    if (humanChoice == computerChoice) {
+                        return "It's a tie!"
+                    } else if ((humanChoice == 'rock' && computerChoice == 'scissors') || 
+                    (humanChoice == 'scissors' && computerChoice == 'paper') ||
+                    (humanChoice == 'paper' && computerChoice == 'rock')) {
+                        humanScore += 1;
+                        return `You win! ${humanChoice} beats ${computerChoice}!`
+                    } else {
+                        computerScore += 1;
+                        return `You lose! ${computerChoice} beats ${humanChoice}!`
+                    }
+                }
+
+                for (i=1; i<=5; i++) {
+                    let result = ""
+                    do {
+                        const humanChoice = getHumanChoice();
+                        const computerChoice = getComputerChoice();
+                        result=playRound(humanChoice, computerChoice);
+                        console.log(result);
+                    } while (result == "It's a tie!")
+                    
+                }
+                if (humanScore > computerScore) {
+                    console.log(`You beat the computer ${humanScore}-${computerScore}`)
+                } else {
+                    console.log(`The computer beat you ${humanScore}-${computerScore}`)
+                }
+            }
         </script>
     </body>
 </html>
