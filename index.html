@@ -8,6 +8,30 @@
 
     <body>
         <script>
+            const body = document.querySelector("body");
+            const rock = document.createElement("button");
+            const paper = document.createElement("button");
+            const scissors = document.createElement("button");
+
+            const result = document.createElement("div");
+            result.style.cssText = "border: 2px solid black";
+            result.style.margin = "16px";
+            result.style.padding = "8px";
+            result.textContent = "you: 0  computer: 0"
+
+            rock.textContent = "rock";
+            paper.textContent = "paper";
+            scissors.textContent = "scissors";
+
+            rock.style.margin = "16px";
+            paper.style.margin = "16px";
+            scissors.style.margin = "16px";
+
+            body.appendChild(rock);
+            body.appendChild(paper);
+            body.appendChild(scissors);
+            body.appendChild(result);
+
             function getComputerChoice() {
                 const prob = Math.random() * 3;
 
@@ -20,44 +44,57 @@
                 }
             }
 
-            function getHumanChoice() {
-                return prompt("Please choose between rock, paper, scissors to play in this round");
-            }
-
             function playGame() {
                 let humanScore = 0;
                 let computerScore = 0;
 
-                function playRound(humanChoice, computerChoice) {
+                function handleRock() {
+                    playRound("rock");
+                }
+                function handlePaper() {
+                    playRound("paper");
+                }
+                function handleScissors() {
+                    playRound("scissors");
+                }
+
+                rock.addEventListener("click", handleRock);
+                paper.addEventListener("click", handlePaper);
+                scissors.addEventListener("click", handleScissors);
+
+                function playRound(humanChoice) {
                     humanChoice = humanChoice.toLowerCase();
+                    computerChoice = getComputerChoice();
 
                     if (humanChoice == computerChoice) {
-                        return "It's a tie!"
+                        console.log("It's a tie!");
                     } else if ((humanChoice == 'rock' && computerChoice == 'scissors') || 
                     (humanChoice == 'scissors' && computerChoice == 'paper') ||
                     (humanChoice == 'paper' && computerChoice == 'rock')) {
                         humanScore += 1;
-                        return `You win! ${humanChoice} beats ${computerChoice}!`
+                        result.textContent = `you: ${humanScore} computer: ${computerScore}`
                     } else {
                         computerScore += 1;
-                        return `You lose! ${computerChoice} beats ${humanChoice}!`
+                        result.textContent = `you: ${humanScore} computer: ${computerScore}`
                     }
-                }
 
-                for (i=1; i<=5; i++) {
-                    let result = ""
-                    do {
-                        const humanChoice = getHumanChoice();
-                        const computerChoice = getComputerChoice();
-                        result=playRound(humanChoice, computerChoice);
-                        console.log(result);
-                    } while (result == "It's a tie!")
-                    
-                }
-                if (humanScore > computerScore) {
-                    console.log(`You beat the computer ${humanScore}-${computerScore}`)
-                } else {
-                    console.log(`The computer beat you ${humanScore}-${computerScore}`)
+                    function winner(str) {
+                        const winner = document.createElement("h1");
+                        winner.textContent = str;
+                        winner.style.margin = "8px";
+                        winner.style.color = "red";
+                        result.appendChild(winner);
+
+                        rock.removeEventListener("click", handleRock);
+                        paper.removeEventListener("click", handlePaper);
+                        scissors.removeEventListener("click", handleScissors);
+                    }
+
+                    if (humanScore == 5) {
+                        winner("YOU WIN!")
+                    } else if (computerScore == 5) {
+                        winner("THE COMPUTER WINS!")
+                    }
                 }
             }
 
